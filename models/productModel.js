@@ -1,5 +1,9 @@
 // 6 Moved from server.js
 const products = require("../data/products");
+const {
+    writeDataToFile // 16
+} = require("../utils")
+
 
 // 7 Create simple function to return promise, and export it
 function findAll() {
@@ -19,8 +23,10 @@ function findById(id) {
 // 15 define and export
 function create(product) {
     return new Promise((resolve, reject) => {
-        const newProduct = {...product, id: Date.now()};
-        products.push(newProduct)
+        const newProduct = {id: `${Date.now()}`, ...product};
+        products.push(newProduct);
+        writeDataToFile("./data/products.json", newProduct);
+        resolve(newProduct);
     })
 }
 
