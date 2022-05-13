@@ -11,14 +11,38 @@ const server = http.createServer((req, res) => {
 });
 */
 
-// 2.
+/*
+// 2. Returns json on any request method and endpoint
 const server = http.createServer((req, res) => {
     // summarize res.statusCode and res.setHeader together
     res.writeHead(200, {"Content-type": "application/json"});
     // will come out with just a regular js array, thus we have to stringify
     res.write(JSON.stringify(products));
     res.end;
+});
+*/
+
+/*
+// 3 Returns json on any request method and endpoint
+const server = http.createServer((req, res) => {
+    res.writeHead(200, {"Content-type": "application/json"});
+    // res.write then res.end could be summarized into just res.end
+    res.end(JSON.stringify(products));
 })
+*/
+
+/*
+// 4 Returns products on /api/products, and not found on others, on ANY request method.
+const server = http.createServer((req, res) => {
+    if (req.url === "/api/products") {
+        res.writeHead(200, {"Content-type": "application/json"});
+        res.end(JSON.stringify(products));
+    } else {
+        res.writeHead(404, {"Content-type": "application/json"});
+        res.end(JSON.stringify({message: "Route Not Found"}));
+    }
+})
+*/
 
 
 const PORT = process.env.PORT || 5000
