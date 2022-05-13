@@ -44,7 +44,7 @@ const server = http.createServer((req, res) => {
 })
 */
 
-// 5
+// 5 Returns products on /api/products, and not found on others, on GET request method.
 const server = http.createServer((req, res) => {
     if (req.url === "/api/products" && req.method === "GET") {
         res.writeHead(200, {"Content-type": "application/json"}).end(JSON.stringify(products));
@@ -55,3 +55,9 @@ const server = http.createServer((req, res) => {
 
 const PORT = process.env.PORT || 5000
 server.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
+
+/* we can access request query this way
+const url = require("url")
+const parsedURL = url.parse(req.url, true);
+console.log(parsedURL.query.id)
+*/
