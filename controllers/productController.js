@@ -80,16 +80,48 @@ async function createProduct(req, res) {
 
 // 18 refactor from abovementioned 17, by moving the grabbing the body lines into a separate callback
 async function createProduct(req, res) {
-    const body = await getPostData(req);
-    const {title, description, price} = JSON.parse(body);
-    const product = {title, description, price};
-    const newProduct = await Product.create(product);
-    res.writeHead(201, {"Content-Type": "application/json"});
-    res.end(JSON.stringify(newProduct));
+    try {
+        const body = await getPostData(req);
+        const {title, description, price} = JSON.parse(body);
+        const product = {title, description, price};
+        const newProduct = await Product.create(product);
+        res.writeHead(201, {"Content-Type": "application/json"});
+        res.end(JSON.stringify(newProduct));
+    } catch(err) {
+        console.log(err);
+    }
+}
+
+// 19 /api/products/id
+async function updateProduct(req, res, id) {
+    try {
+        const doc = await Product.findById(id);
+        if (!doc) {
+            res.writeHead(404, {"Content-Type": "application/json"});
+            res.end(JSON.stringify({message: "Product Not Found"}));
+        } else {
+            const body = await getPostData(req);
+            const {title, description, price} = JSON.parse(body);
+            const updated = {
+                title: title || doc.title,
+                description: description || doc.description,
+                price: price || doc.price
+            }
+            const updatedProduct = await Product.update(id, updated);
+            // status 204 will NOT return anything!
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(updatedProduct));
+
+        }
+    } catch (err) {
+        console.log(err);
+    }
+
 }
 
 module.exports = {
     getProducts,
     getProduct,
-    createProduct
+    createProduct,
+    updateProduct // 19
 }
