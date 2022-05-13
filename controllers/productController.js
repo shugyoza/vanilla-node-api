@@ -28,6 +28,7 @@ async function getProduct(req, res, id) {
     }
 }
 
+/*
 // 14 define and export for POST to /api/products/
 async function createProduct(req, res) {
     try {
@@ -41,6 +42,37 @@ async function createProduct(req, res) {
         return res.end(JSON.stringify(newProduct));
     } catch (err) {
         console.log(err)
+    }
+} */
+
+// 17 refactor the abovementioned 14 to be able to take input from body
+// // we cannot use req.body method available on Express
+async function createProduct(req, res) {
+    try {
+        let body = "";
+        req.on("data", (chunk) => {
+            // end up with buffer we need to convert into a string
+            console.log(chunk, chunk.toString());
+            body += chunk.toString()
+        });
+
+        req.on("end", async () => {
+            // grab the values from parsed body
+            const { title, description, price } = JSON.parse(body);
+            // create the new product
+            const product = {
+                title,
+                description,
+                price
+            }
+
+            const newProduct = await Product.create(product);
+            res.writeHead(201, { "Content-Type": "application/json"});
+            res.end(JSON.stringify(newProduct));
+        })
+
+    } catch (err) {
+        console.log(err);
     }
 }
 

@@ -1,5 +1,5 @@
 // 6 Moved from server.js
-const products = require("../data/products");
+let products = require("../data/products.json");
 const {
     writeDataToFile // 16
 } = require("../utils")
@@ -24,8 +24,8 @@ function findById(id) {
 function create(product) {
     return new Promise((resolve, reject) => {
         const newProduct = {id: `${Date.now()}`, ...product};
-        products.push(newProduct);
-        writeDataToFile("./data/products.json", newProduct);
+        products = [...products, newProduct];
+        writeDataToFile("./data/products.json", products);
         resolve(newProduct);
     })
 }
