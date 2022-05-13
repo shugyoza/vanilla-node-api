@@ -1,5 +1,6 @@
 // 8
-const Product = require("../models/productModel")
+const Product = require("../models/productModel");
+const {getPostData} = require("../utils");
 
 // 9 moved from server.js if else
 async function getProducts(req, res) {
@@ -45,6 +46,7 @@ async function createProduct(req, res) {
     }
 } */
 
+/*
 // 17 refactor the abovementioned 14 to be able to take input from body
 // // we cannot use req.body method available on Express
 async function createProduct(req, res) {
@@ -74,6 +76,16 @@ async function createProduct(req, res) {
     } catch (err) {
         console.log(err);
     }
+} */
+
+// 18 refactor from abovementioned 17, by moving the grabbing the body lines into a separate callback
+async function createProduct(req, res) {
+    const body = await getPostData(req);
+    const {title, description, price} = JSON.parse(body);
+    const product = {title, description, price};
+    const newProduct = await Product.create(product);
+    res.writeHead(201, {"Content-Type": "application/json"});
+    res.end(JSON.stringify(newProduct));
 }
 
 module.exports = {

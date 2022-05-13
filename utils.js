@@ -9,6 +9,24 @@ function writeDataToFile(filename, content) {
     })
 }
 
+// 17 define a callback to grab values from body
+function getPostData(req) {
+    return new Promise((resolve, reject) => {
+        try {
+            let body = "";
+            req.on("data", (chunk) => {
+                body += chunk.toString();
+            });
+            req.on("end", () => {
+                resolve(body)
+            })
+        } catch (err) {
+            reject(err);
+        }
+    })
+}
+
 module.exports = {
-    writeDataToFile // 16
+    writeDataToFile, // 16
+    getPostData // 17
 }
