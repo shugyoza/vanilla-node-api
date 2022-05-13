@@ -1,4 +1,5 @@
 const http = require("http");
+const products = require("./data/products")
 
 // Prints Hello World in the browser
 const server = http.createServer((req, res) => {
