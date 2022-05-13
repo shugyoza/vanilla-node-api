@@ -40,9 +40,20 @@ function update(id, updateObj) {
     })
 }
 
+// 20
+function deleteOne(id) {
+    return new Promise((resolve, reject) => {
+        const idx = products.findIndex((p) => p.id === id);
+        const deleted = products.splice(idx, 1)[0];
+        writeDataToFile("./data/products.json", products);
+        resolve(deleted);
+    })
+}
+
 module.exports = {
     findAll,
     findById,
     create,
-    update // 19
+    update, // 19
+    deleteOne // 20
 }

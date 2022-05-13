@@ -111,17 +111,33 @@ async function updateProduct(req, res, id) {
             // status 204 will NOT return anything!
             res.writeHead(200, {"Content-Type": "application/json"});
             res.end(JSON.stringify(updatedProduct));
-
         }
     } catch (err) {
         console.log(err);
     }
+}
 
+// 20
+async function deleteProduct(req, res, id) {
+    try {
+        const doc = await Product.findById(id);
+        if (!doc) {
+            res.writeHead(404, {"Content-Type": "application/json"});
+            res.end(JSON.stringify({message: "Product Not Found"}));
+        } else {
+            const deletedProduct = await Product.deleteOne(id);
+            res.writeHead(200, {"Content-Type": "application/json"});
+            res.end(JSON.stringify(deletedProduct));
+        }
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 module.exports = {
     getProducts,
     getProduct,
     createProduct,
-    updateProduct // 19
+    updateProduct, // 19
+    deleteProduct // 20
 }
